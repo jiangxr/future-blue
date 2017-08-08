@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <properties>
+        <property name="username" value="jiangcw-testing"></property>
+        <property name="password" value="jiangcw-testing"></property>
+    </properties>
+
+    <settings>
+        <!-- 打开缓存的全局开关 -->
+        <setting name="cacheEnabled" value="true"></setting>
+        <!-- 打开延迟加载 -->
+        <setting name="lazyLoadingEnabled" value="true"></setting>
+        <!-- 是否允许单一语句返回多结果集（需要兼容驱动）-->
+        <setting name="multipleResultSetsEnabled" value="true"/>
+        <!-- 使用列标签代替列名 -->
+        <setting name="useColumnLabel" value="true"/>
+        <!-- 允许 JDBC 支持自动生成主键，需要驱动兼容 -->
+        <setting name="useGeneratedKeys" value="false"/>
+        <!--指定 MyBatis 应如何自动映射列到字段或属性。 NONE 表示取消自动映射；
+        PARTIAL 只会自动映射没有定义嵌套结果集映射的结果集。 FULL 会自动映射任意复杂的结果集（无论是否嵌套）。 -->
+        <setting name="autoMappingBehavior" value="PARTIAL"/>
+        <!-- 指定发现自动映射目标未知列（或者未知属性类型）的行为。 -->
+        <setting name="autoMappingUnknownColumnBehavior" value="WARNING"/>
+        <!--配置默认的执行器。SIMPLE 就是普通的执行器；REUSE 执行器会重用预处理语句（prepared statements）；
+        BATCH 执行器将重用语句并执行批量更新。 -->
+        <setting name="defaultExecutorType" value="SIMPLE"/>
+        <!--设置超时时间，它决定驱动等待数据库响应的秒数。 -->
+        <setting name="defaultStatementTimeout" value="25"/>
+        <!--为驱动的结果集获取数量（fetchSize）设置一个提示值。 -->
+        <setting name="defaultFetchSize" value="100"/>
+        <!--允许在嵌套语句中使用分页（RowBounds） -->
+        <setting name="safeRowBoundsEnabled" value="false"/>
+        <!--是否开启自动驼峰命名规则（camel case）映射 -->
+        <setting name="mapUnderscoreToCamelCase" value="false"/>
+        <!--MyBatis 利用本地缓存机制（Local Cache）防止循环引用（circular references）和加速重复嵌套查询 -->
+        <setting name="localCacheScope" value="SESSION"/>
+        <!--当没有为参数提供特定的 JDBC 类型时，为空值指定 JDBC 类型 -->
+        <setting name="jdbcTypeForNull" value="OTHER"/>
+        <!--指定哪个对象的方法触发一次延迟加载。 -->
+        <setting name="lazyLoadTriggerMethods" value="equals,clone,hashCode,toString"/>
+    </settings>
+    
+    <typeAliases>
+        <!-- 为一个类指定别名-->
+        <typeAlias type="domain.blog.Author" alias="author"></typeAlias>
+        <!-- 此包下的类的别人在没有注解的情况下，别人是类的首字母小写的单词 -->
+        <package name="domain.blog"/>
+    </typeAliases>
+
+    <typeHandlers>
+        <!-- 指定类型处理器 -->
+        <typeHandler handler="org.mybatis.example.ExampleTypeHandler" />
+        <!-- 在包下查找类型处理器 -->
+        <package name="org.mybatis.example" />
+    </typeHandlers>
+
+    <!-- 创建的自定义对象工厂 -->
+    <objectFactory type="org.mybatis.example.ExampleObjectFactory">
+        <property name="someProperty" value="100"/>
+    </objectFactory>
+
+
+
+    <environments default="development">
+        <environment id="development">
+            <!-- JDBC、MANAGED -->
+            <transactionManager type="JDBC"></transactionManager>
+            <!-- UNPOOLED/POOLED/JNDI -->
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver"></property>
+                <property name="url" value="jdbc:mysql://localhost:3306/future"></property>
+                <property name="username" value="${username}"></property>
+                <property name="password" value="${password}"></property>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!--映射器的配置，告诉mybatis到哪里找映射文件 -->
+    <mappers>
+        <!-- 单一的配置文件 -->
+        <mapper resource="org/mybatis/builder/AuthorMapper.xml"></mapper>
+        <!-- Register all interfaces in a package as mappers -->
+        <package name="org.mybatis.builder" />
+    </mappers>
+
+</configuration>
